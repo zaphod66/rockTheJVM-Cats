@@ -1,4 +1,4 @@
-package recap
+package part1intro
 
 object Implicits {
 
@@ -32,7 +32,7 @@ object Implicits {
   }
 
   val personsJson = listToJson(List(Person("Alice"), Person("Bob")))
-  val catsJson = listToJson(List(Cat("Alice"), Cat("Bob")))
+  val catsJson = listToJson(List(Cat("Garfield"), Cat("Tom")))
 
   def main(args: Array[String]): Unit = {
     println(personsJson)
