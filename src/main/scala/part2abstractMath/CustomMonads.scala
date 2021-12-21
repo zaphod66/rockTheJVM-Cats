@@ -36,8 +36,8 @@ object CustomMonads {
   }
 
   sealed trait Tree[+A]
-  case class Leaf[+A](value: A) extends Tree[A]
-  case class Branch[+A](left: Tree[A], right: Tree[A]) extends Tree[A]
+  final case class Leaf[+A](value: A) extends Tree[A]
+  final case class Branch[+A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
   object Tree {
     def leaf[A](a: A): Tree[A] = Leaf(a)
@@ -63,14 +63,14 @@ object CustomMonads {
         case Branch(l, r) => branch(stackRec(l), stackRec(r))
       }
 
-      def tailRec(todo: List[Tree[Either[A, B]]], expanded: Set[Tree[Either[A, B]]], done: List[Tree[B]]): Tree[B] =
+      def tailRec(todo: List[Tree[Either[A, B]]], expanded: List[Tree[Either[A, B]]], done: List[Tree[B]]): Tree[B] =
         if (todo.isEmpty) done.head
         else todo.head match {
           case Leaf(Left(v))       => tailRec(f(v) :: todo.tail, expanded, done)
           case Leaf(Right(b))      => tailRec(todo.tail, expanded, leaf(b) :: done)
           case node @ Branch(l, r) =>
             if (!expanded.contains(node)) {
-              tailRec(r :: l :: todo, expanded + node, done)
+              tailRec(r :: l :: todo, node :: expanded, done)
             } else {
               val newL = done.head
               val newR = done.tail.head
@@ -80,7 +80,7 @@ object CustomMonads {
         }
 
 //      stackRec(f(a))
-      tailRec(List(f(a)), Set.empty, List.empty)
+      tailRec(List(f(a)), List.empty, List.empty)
     }
   }
 
