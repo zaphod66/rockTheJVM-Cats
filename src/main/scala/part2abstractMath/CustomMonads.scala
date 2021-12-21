@@ -57,7 +57,7 @@ object CustomMonads {
 
     override def tailRecM[A, B](a: A)(f: A => Tree[Either[A, B]]): Tree[B] = {
       // not stacksafe
-œ      def stackRec(t: Tree[Either[A, B]]): Tree[B] = t match {
+      def stackRec(t: Tree[Either[A, B]]): Tree[B] = t match {
         case Leaf(Left(a))  => stackRec(f(a))
         case Leaf(Right(b)) => leaf(b)
         case Branch(l, r) => branch(stackRec(l), stackRec(r))
