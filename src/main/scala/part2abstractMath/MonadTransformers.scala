@@ -64,17 +64,8 @@ object MonadTransformers {
     val cc = Await.result(cf, Inf)
     println(s"""canWithstandSurge(s1, s2) = $cc""")
 
-    def util(s1: String, s2: String): Either[String, String] = {
-      val rf = generateTrafficSpikeReport(s1, s2).value
-      Await.result(rf, Inf)
-    }
-
-    val rc1 = util("server1", "server2")
-    println(s"""generateTrafficSpikeReport(s1, s2) = $rc1""")
-    val rc2 = util("server1", "server3")
-    println(s"""generateTrafficSpikeReport(s1, s2) = $rc2""")
-    val rc3 = util("server1", "server4")
-    println(s"""generateTrafficSpikeReport(s1, s2) = $rc3""")
-
+    generateTrafficSpikeReport("server1", "server2").value.foreach(println)
+    generateTrafficSpikeReport("server1", "server4").value.foreach(println)
+    generateTrafficSpikeReport("server1", "server3").value.foreach(println)
   }
 }
