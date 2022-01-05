@@ -12,7 +12,7 @@ object Readers {
     - a business logic layer
    */
 
-  case class Config(dbUser: String, dbPass: String, host: String, port: Int, nThreads: Int, email: String)
+  case class Config(dbUser: String, dbPass: String, host: String, port: Int, nThreads: Int, replyTo: String)
   case class DbConnection(user: String, pass: String) {
     def getOderStatus(oderId: Long): String = s"$oderId dispatched"
     def getLastOrderId(user: String): Long = 542643
@@ -22,13 +22,12 @@ object Readers {
     def start(): Unit = println("server started")
   }
 
-  val config: Config = Config("Bob", "password", "localhost", 1234, 8, "bob@gmail.com")
+  val config: Config = Config("Bob", "password", "localhost", 1234, 8, "support@store.com")
 
   import cats.data.Reader
 
   val dbReader: Reader[Config, DbConnection] = Reader(conf => DbConnection(conf.dbUser, conf.dbPass))
   val orderStatusReader: Reader[Config, String] = dbReader.map(dbConn => dbConn.getOderStatus(4211L))
-  val emailReader: Reader[Config, String] = Reader(conf => conf.email)
 
   def getLastOrderStatusReader(user: String) = dbReader
     .map(_.getLastOrderId(user))
@@ -43,10 +42,15 @@ object Readers {
   }
 
   def emailUser(user: String, email: String) = {
-    for {
-      orderStatus <- getLastOrderStatusReader(user)
+    val emailServiceReader: Reader[Config, EmailService] = Reader(conf => EmailService(conf.replyTo))
 
-    } yield ()
+    val emailReader: Reader[Config, String] = for {
+      lastOrderId <- dbReader.map(_.getLastOrderId(user))
+      orderStatus <- dbReader.map(_.getOderStatus(lastOrderId))
+      emailService <- emailServiceReader
+    } yield (emailService.sendEmail(email, s"Your last order has status: $orderStatus"))
+
+    emailReader.run(config)
   }
   /*
     Pattern:
@@ -63,5 +67,6 @@ object Readers {
     println(s"dbConnection: $dbConnection")
     println(s"orderStatus:  $orderStatus")
     println(s"""getLastOrderStatus: ${getLastOrderStatus("Alan")}""")
+    println(s"""emailUser: ${emailUser("Alice", "aliceß@gmail.com")}""")
   }
 }
