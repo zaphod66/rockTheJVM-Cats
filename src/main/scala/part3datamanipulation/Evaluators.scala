@@ -46,7 +46,6 @@ object Evaluators {
     if (list.isEmpty) Eval.now(list)
     else defer(reverseListEval(list.tail).map(l => l :+ list.head))
 
-  Eval.defer()
   def main(args: Array[String]): Unit = {
     println("====================")
     println(s"instantEval     = ${instantEval.value}")
