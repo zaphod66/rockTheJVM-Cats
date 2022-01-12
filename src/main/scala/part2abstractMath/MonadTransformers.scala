@@ -1,6 +1,7 @@
 package part2abstractMath
 
 import part2abstractMath.MonadTransformers.canWithstandSurge
+import util.ExecutionContextExecutorServiceBridge
 
 import java.util.concurrent.Executors
 import scala.concurrent.duration.Duration.Inf
@@ -67,5 +68,7 @@ object MonadTransformers {
     generateTrafficSpikeReport("server1", "server2").value.foreach(println)
     generateTrafficSpikeReport("server1", "server4").value.foreach(println)
     generateTrafficSpikeReport("server1", "server3").value.foreach(println)
+
+    ExecutionContextExecutorServiceBridge(ec).shutdownNow()
   }
 }

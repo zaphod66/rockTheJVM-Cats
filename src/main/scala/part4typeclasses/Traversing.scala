@@ -1,6 +1,7 @@
 package part4typeclasses
 
 import cats.{Applicative, Monad}
+import util.ExecutionContextExecutorServiceBridge
 
 import java.util.concurrent.Executors
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,5 +53,7 @@ object Traversing {
   def main(args: Array[String]): Unit = {
     println(s"l1: $l1")
     println(s"l2: $l2")
+
+    ExecutionContextExecutorServiceBridge(ec).shutdownNow()
   }
 }
