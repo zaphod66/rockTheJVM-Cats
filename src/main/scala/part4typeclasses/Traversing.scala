@@ -1,9 +1,11 @@
 package part4typeclasses
 
 import cats.{Applicative, Monad}
+// import util.ExecutionContextExecutorServiceBridge
 
 import java.util.concurrent.Executors
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration.Inf
+import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutorService, Future}
 
 object Traversing {
 
@@ -50,7 +52,12 @@ object Traversing {
   val l2: Vector[List[Int]] = listSequence2(List(Vector(1, 2), Vector(3, 4), Vector(5, 6)))
 
   def main(args: Array[String]): Unit = {
+    println(s"allBandwidthTraverse: ${Await.result(allBandwidthTraverse, Inf)}")
+    println(s"allBandwidthSequence: ${Await.result(allBandwidthSequence, Inf)}")
     println(s"l1: $l1")
     println(s"l2: $l2")
+
+//    ExecutionContextExecutorServiceBridge(ec).shutdownNow()
+    ec.asInstanceOf[ExecutionContextExecutorService].shutdown()
   }
 }
