@@ -55,6 +55,15 @@ object HandlingErrors {
   val testedSuccess: ErrorOr[Int] = success.ensure("Boom")(_ > 100)
 
   def main(args: Array[String]): Unit = {
-
+    println(s"success:         $success")
+    println(s"failure:         $failure")
+    println(s"handled:         $handled")
+    println(s"handle2:         $handle2")
+    println(s"filtered:        $filtered")
+    println(s"pureException:   $pureException")
+    println(s"extendedSuccess: $extendedSuccess")
+    println(s"extendedError:   $extendedError")
+    println(s"recoveredError:  $recoveredError")
+    println(s"testedSuccess:   $testedSuccess")
   }
 }
