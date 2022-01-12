@@ -57,7 +57,6 @@ object Traversing {
     println(s"l1: $l1")
     println(s"l2: $l2")
 
-//    ExecutionContextExecutorServiceBridge(ec).shutdownNow()
     ec.asInstanceOf[ExecutionContextExecutorService].shutdown()
   }
 }

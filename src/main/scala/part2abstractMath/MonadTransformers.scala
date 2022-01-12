@@ -69,7 +69,6 @@ object MonadTransformers {
     generateTrafficSpikeReport("server1", "server4").value.foreach(println)
     generateTrafficSpikeReport("server1", "server3").value.foreach(println)
 
-//    ExecutionContextExecutorServiceBridge(ec).shutdownNow()
     ec.asInstanceOf[ExecutionContextExecutorService].shutdown()
   }
 }
