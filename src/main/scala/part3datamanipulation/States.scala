@@ -49,9 +49,9 @@ object States {
   } yield (a, b, c)
 
   def main(args: Array[String]): Unit = {
-    println(s"countAndSay = ${countAndSay.run(10).value}")
-    println(s"comState =    ${comState.run(10).value}")
-    println(s"comFunc =     ${func3(10)}")
+    println(s"countAndSay  = ${countAndSay.run(10).value}")
+    println(s"comState     = ${comState.run(10).value}")
+    println(s"comFunc      = ${func3(10)}")
 
     val sc1 = ShoppingCart(List("iPhone"), 1000.0)
     val State = addToCart("iPad", 1500)
