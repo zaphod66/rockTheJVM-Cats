@@ -6,7 +6,7 @@ import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutorServic
 
 object MonadTransformers {
 
-  def summAllOptions(values: List[Option[Int]]): Int = ???
+  def sumAllOptions(values: List[Option[Int]]): Int = ???
 
   import cats.data.OptionT
   import cats.instances.list._
@@ -62,9 +62,18 @@ object MonadTransformers {
     val cc = Await.result(cf, Inf)
     println(s"""canWithstandSurge(s1, s2) = $cc""")
 
-    generateTrafficSpikeReport("server1", "server2").value.foreach(println)
-    generateTrafficSpikeReport("server1", "server4").value.foreach(println)
-    generateTrafficSpikeReport("server1", "server3").value.foreach(println)
+    println("-------------")
+    val r1M = generateTrafficSpikeReport("server1", "server2").value
+    val r2M = generateTrafficSpikeReport("server1", "server4").value
+    val r3M = generateTrafficSpikeReport("server1", "server3").value
+
+    Await.result(r1M, scala.concurrent.duration.Duration.Inf)
+    Await.result(r2M, scala.concurrent.duration.Duration.Inf)
+    Await.result(r3M, scala.concurrent.duration.Duration.Inf)
+
+    r1M.foreach(println)
+    r2M.foreach(println)
+    r3M.foreach(println)
 
     ec.asInstanceOf[ExecutionContextExecutorService].shutdown()
   }
